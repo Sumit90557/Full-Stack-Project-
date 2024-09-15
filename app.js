@@ -1,8 +1,13 @@
+if(process.env.NODE_ENV != "production"){
+    require('dotenv').config();
+}
+
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const Listing = require("./models/listing.js");
-const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
+// const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
+const dburl = process.env.ATLASDB_URL;
 const path = require("path");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
@@ -13,6 +18,7 @@ const Review = require("./models/review.js");
 
 
 const session = require("express-session");
+const MongoStore = require("connect-mongo");
 const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
@@ -32,7 +38,7 @@ main().then(()=>{
 
 
 async function main(){
-    await mongoose.connect(MONGO_URL);
+    await mongoose.connect(dburl);
 }
 
 app.set("view engine" ,"ejs");
@@ -41,6 +47,7 @@ app.use(express.urlencoded({extended:true}));
 app.use(methodOverride("_method"));
 app.engine('ejs' , ejsMate);
 app.use(express.static(path.join(__dirname , "/public")));
+
 const sessionOptions = {
     secret : "mysupersecretcode",
     resave : false,
@@ -53,9 +60,11 @@ const sessionOptions = {
     },
 };
 
-app.get("/" , (req , res)=>{
-    res.send("hi , i am root");  
- });
+// app.get("/" , (req , res)=>{
+//     res.send("hi , i am root");  
+//  });
+
+
 
 app.use(session(sessionOptions));
 app.use(flash());
@@ -77,14 +86,27 @@ app.use((req , res , next)=>{
 });
 
 
-// app.get("/demouser" , async(req , res)=>{
-//     let fakeUser = new User({
-//         email: "studet@gmail.com",
-//         username: "sigma-student",
-//     });
-//  let registeredUser = await User.register(fakeUser , "helloworld");
-//   res.send(registeredUser);
+// app.get("/demouser", async (req, res) => {
+//     try {
+//         let fakeUser = new User({
+//             email: "studet@gmail.com",
+//             username: "sumit Rajpoot",
+//         });
+
+//         // Register the user with a password
+//         let registeredUser = await User.register(fakeUser, "helloworld");
+
+//         // Access the userId (MongoDB document _id)
+//         let userId = registeredUser._id;
+
+//         // Send the userId as a response
+//         res.send(`The user ID of demouser is: ${userId}`);
+//     } catch (err) {
+//         console.error(err);
+//         res.status(500).send("Error registering user");
+//     }
 // });
+
 
 app.use("/listings" , listingRouter);
 

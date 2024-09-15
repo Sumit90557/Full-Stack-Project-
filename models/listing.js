@@ -10,12 +10,10 @@ const listingSchema = new Schema({
     },
     description : String , 
     image : {
-
-        type :String ,
-        default :"https://unsplash.com/photos/seashore-during-golden-hour-KMn4VEeEPR8" ,
-        set :(v) => v ==="" ?"https://unsplash.com/photos/seashore-during-golden-hour-KMn4VEeEPR8" : v ,
-
-    } ,
+        url: String, 
+        filename: String,
+       
+    },
     price : Number , 
     location : String , 
     country : String ,  
@@ -25,6 +23,11 @@ const listingSchema = new Schema({
             ref : "Review",
         },
      ],
+     owner: {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+
+     },
 });
 
 listingSchema.post("findOneAndDelete" , async(listing)=>{
