@@ -85,9 +85,11 @@ app.use((req , res , next)=>{
 
 });
 
-app.get('/', (req, res) => {
-  res.render('listings/index');
+app.get('/', async (req, res) => {
+  const allListings = await Listing.find({});
+  res.render('listings/index', { allListings });
 });
+
 
 // app.get("/demouser", async (req, res) => {
 //     try {
