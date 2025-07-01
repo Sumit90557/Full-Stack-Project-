@@ -26,7 +26,7 @@ const User = require("./models/user.js");
 const userRouter = require("./routes/user.js");
 const listingRouter = require("./routes/listing.js");
 const reviewRouter= require("./routes/review.js");
-
+const PORT = process.env.PORT || 8080;
 
 
 main().then(()=>{
@@ -128,6 +128,6 @@ app.use((err , req , res , next)=>{
 
 });
 
-app.listen(8080 , ()=>{
-    console.log("server is listening to port 8080");
+app.listen(PORT, ()=> {
+  console.log(`server is listening to port ${PORT}`);
 });
