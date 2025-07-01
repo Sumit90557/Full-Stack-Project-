@@ -88,6 +88,7 @@ app.use((req , res , next)=>{
 app.get('/', (req, res) => {
   res.render('listings/index');
 });
+
 // app.get("/demouser", async (req, res) => {
 //     try {
 //         let fakeUser = new User({
